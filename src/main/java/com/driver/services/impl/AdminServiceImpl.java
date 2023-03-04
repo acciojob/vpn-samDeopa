@@ -26,9 +26,10 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Admin register(String username, String password) {
-        Admin admin =  new Admin();
+        Admin admin = new Admin();
         admin.setUsername(username);
         admin.setPassword(password);
+
         adminRepository1.save(admin);
         return admin;
     }
@@ -37,51 +38,49 @@ public class AdminServiceImpl implements AdminService {
     public Admin addServiceProvider(int adminId, String providerName) {
         Admin admin = adminRepository1.findById(adminId).get();
         ServiceProvider serviceProvider = new ServiceProvider();
+
         serviceProvider.setAdmin(admin);
         serviceProvider.setName(providerName);
-        List<ServiceProvider> providerList = admin.getServiceProviders();
-        providerList.add(serviceProvider);
-        admin.setServiceProviders(providerList);
-
+        admin.getServiceProviders().add(serviceProvider);
         adminRepository1.save(admin);
         return admin;
     }
 
     @Override
     public ServiceProvider addCountry(int serviceProviderId, String countryName) throws Exception{
-        Country country = new Country();
-        //dont know how to put country name just guessing
-        country.setCountryName(CountryName.valueOf(countryName) );
+        if(countryName.equalsIgnoreCase("IND") || countryName.equalsIgnoreCase("USA") || countryName.equalsIgnoreCase("JPN") || countryName.equalsIgnoreCase("CHI") || countryName.equalsIgnoreCase("AUS")){
+            Country country = new Country();
 
-        if(countryName.equalsIgnoreCase("IND")){
-            country.setCountryName(CountryName.IND);
-            country.setCode(CountryName.IND.toCode());
-        }
-        if(countryName.equalsIgnoreCase("USA")){
-            country.setCountryName(CountryName.USA);
-            country.setCode(CountryName.USA.toCode());
-        }
-        if(countryName.equalsIgnoreCase("JPN")){
-            country.setCountryName(CountryName.JPN);
-            country.setCode(CountryName.JPN.toCode());
-        }
-        if(countryName.equalsIgnoreCase("CHI")){
-            country.setCountryName(CountryName.CHI);
-            country.setCode(CountryName.CHI.toCode());
-        }
-        if(countryName.equalsIgnoreCase("AUS")){
-            country.setCountryName(CountryName.AUS);
-            country.setCode(CountryName.AUS.toCode());
-        }
+            ServiceProvider serviceProvider = serviceProviderRepository1.findById(serviceProviderId).get();
 
+            if(countryName.equalsIgnoreCase("IND")){
+                country.setCountryName(CountryName.IND);
+                country.setCode(CountryName.IND.toCode());
+            }
+            if(countryName.equalsIgnoreCase("USA")){
+                country.setCountryName(CountryName.USA);
+                country.setCode(CountryName.USA.toCode());
+            }
+            if(countryName.equalsIgnoreCase("JPN")){
+                country.setCountryName(CountryName.JPN);
+                country.setCode(CountryName.JPN.toCode());
+            }
+            if(countryName.equalsIgnoreCase("CHI")){
+                country.setCountryName(CountryName.CHI);
+                country.setCode(CountryName.CHI.toCode());
+            }
+            if(countryName.equalsIgnoreCase("AUS")){
+                country.setCountryName(CountryName.AUS);
+                country.setCode(CountryName.AUS.toCode());
+            }
+            country.setServiceProvider(serviceProvider);
+            serviceProvider.getCountryList().add(country);
+            serviceProviderRepository1.save(serviceProvider);
 
-        ServiceProvider serviceProvider = serviceProviderRepository1.findById(serviceProviderId).get();
-        country.setServiceProvider(serviceProvider);
-        List<Country> countryList = serviceProvider.getCountryList();
-        countryList.add(country);
-        serviceProvider.setCountryList(countryList);
-
-        serviceProviderRepository1.save(serviceProvider);
-        return  serviceProvider;
+            return serviceProvider;
+        }
+        else{
+            throw new Exception("Country not found");
+        }
     }
 }
