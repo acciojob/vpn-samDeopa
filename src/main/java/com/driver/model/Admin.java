@@ -1,7 +1,5 @@
 package com.driver.model;
 
-import jdk.dynalink.linker.LinkerServices;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,7 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  int id;
-    private  String userName;
+    private  String username;
     private  String password;
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
     List<ServiceProvider> serviceProviderList = new ArrayList<>();
@@ -19,9 +17,9 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin(int id, String userName, String password, List<ServiceProvider> serviceProviderList) {
+    public Admin(int id, String username, String password, List<ServiceProvider> serviceProviderList) {
         this.id = id;
-        this.userName = userName;
+        this.username = username;
         this.password = password;
         this.serviceProviderList = serviceProviderList;
     }
@@ -34,12 +32,12 @@ public class Admin {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
